@@ -21,27 +21,27 @@ should be a spatial object representing desire lines}
 Route on local data using the dodgr package
 }
 \examples{
-# from <- geo_code("pedallers arms leeds")
-from <- c(-1.5327, 53.8006)
-# to <- geo_code("gzing")
-to <- c(-1.5279, 53.8044)
-# next 4 lines recreate `stplanr::osm_net_example`
-# pts <- rbind(from, to)
-# colnames(pts) <- c("X", "Y")
-# net <- dodgr::dodgr_streetnet(pts = rbind(from, to), expand = 0.1)
-# osm_net_example <- net[c("highway", "name", "lanes", "maxspeed")]
-r <- route_dodgr(from, to, net = osm_net_example)
-plot(osm_net_example$geometry)
-plot(r$geometry, add = TRUE, col = "red", lwd = 5)
+if (requireNamespace("dodgr")) {
+  from <- c(-1.5327, 53.8006) # from <- geo_code("pedallers arms leeds")
+  to <- c(-1.5279, 53.8044) # to <- geo_code("gzing")
+  # next 4 lines were used to generate `stplanr::osm_net_example`
+  # pts <- rbind(from, to)
+  # colnames(pts) <- c("X", "Y")
+  # net <- dodgr::dodgr_streetnet(pts = pts, expand = 0.1)
+  # osm_net_example <- net[c("highway", "name", "lanes", "maxspeed")]
+  r <- route_dodgr(from, to, net = osm_net_example)
+  plot(osm_net_example$geometry)
+  plot(r$geometry, add = TRUE, col = "red", lwd = 5)
+}
 }
 \seealso{
-Other routes: \code{\link{line2routeRetry}},
-  \code{\link{line2route}}, \code{\link{nearest2spdf}},
-  \code{\link{route_cyclestreet}},
-  \code{\link{route_graphhopper}},
-  \code{\link{route_local}}, \code{\link{route_osrm}},
-  \code{\link{route_transportapi_public}},
-  \code{\link{route}}, \code{\link{viaroute2sldf}},
-  \code{\link{viaroute}}
+Other routes: 
+\code{\link{line2routeRetry}()},
+\code{\link{line2route}()},
+\code{\link{route_cyclestreet}()},
+\code{\link{route_graphhopper}()},
+\code{\link{route_local}()},
+\code{\link{route_transportapi_public}()},
+\code{\link{route}()}
 }
 \concept{routes}

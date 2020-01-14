@@ -263,7 +263,7 @@ NULL
 #' @examples
 #' \dontrun{
 #' l <- routes_fast[13, ]
-#' l_poly <- buff_geo(l, 8)
+#' l_poly <- geo_projected(l, rgeos::gBuffer, 8)
 #' plot(l_poly)
 #' plot(routes_fast, add = TRUE)
 #' # allocate road width to relevant line
@@ -282,7 +282,7 @@ NULL
 
 #' Example of origin-destination data from UK Census
 #'
-#' See the `stplanr-1-od` vignette for details on how this was created.
+#' See `data-raw/generate-data.Rmd` for details on how this was created.
 #'
 #' @docType data
 #' @keywords datasets
@@ -290,4 +290,40 @@ NULL
 #' @format A data frame (tibble) object
 #' @examples
 #' od_data_sample
+NULL
+
+#' Example of roundabout data showing problems for SpatialLinesNetwork objects
+#'
+#' See `data-raw/rnet_roundabout.R` for details on how this was created.
+#'
+#' @docType data
+#' @keywords datasets
+#' @name rnet_roundabout
+#' @format A sf object
+#' @examples
+#' rnet_roundabout
+NULL
+
+#' Example of overpass data showing problems for SpatialLinesNetwork objects
+#'
+#' See `data-raw/rnet_overpass.R` for details on how this was created.
+#'
+#' @docType data
+#' @keywords datasets
+#' @name rnet_overpass
+#' @format A sf object
+#' @examples
+#' rnet_overpass
+NULL
+
+#' Example of cycleway intersection data showing problems for SpatialLinesNetwork objects
+#'
+#' See `data-raw/rnet_cycleway_intersection` for details on how this was created.
+#'
+#' @docType data
+#' @keywords datasets
+#' @name rnet_cycleway_intersection
+#' @format A sf object
+#' @examples
+#' rnet_cycleway_intersection
 NULL

@@ -4,9 +4,15 @@
 \alias{route}
 \title{Plan routes on the transport network}
 \usage{
-route(from = NULL, to = NULL, l = NULL,
-  route_fun = stplanr::route_cyclestreet, n_print = 10,
-  list_output = FALSE, ...)
+route(
+  from = NULL,
+  to = NULL,
+  l = NULL,
+  route_fun = stplanr::route_cyclestreet,
+  n_print = 10,
+  list_output = FALSE,
+  ...
+)
 }
 \arguments{
 \item{from}{An object representing origins
@@ -23,7 +29,7 @@ should be a spatial object representing desire lines}
 \item{n_print}{A number specifying how frequently progress updates
 should be shown}
 
-\item{list_output}{If FALSE (default) assumes SpatialLinesDataFrame output. Set to TRUE to save output as a list.}
+\item{list_output}{If FALSE (default) assumes spatial (linestring) object output. Set to TRUE to save output as a list.}
 
 \item{...}{Arguments passed to the routing function, e.g. \code{\link[=route_cyclestreet]{route_cyclestreet()}}}
 }
@@ -33,22 +39,29 @@ and returns the result as a spatial (sf or sp) object.
 The definition of optimal depends on the routing function used
 }
 \examples{
-\dontrun{
-from <- "Leek, UK"
-to <- "Hereford, UK"
-route_leek_to_hereford <- route(from, to)
+\donttest{
+# these lines require API keys/osrm instances
+from <- c(-1.5484, 53.7941) # from <- geo_code("leeds rail station")
+to <-   c(-1.5524, 53.8038) # to <- geo_code("university of leeds")
+r <- route(from, to, route_fun = cyclestreets::journey)
+plot(r)
+# mapview::mapview(r) # for interactive map
 route(cents_sf[1:3, ], cents_sf[2:4, ]) # sf points
 route(flowlines_sf[2:4, ]) # lines
+# with osrm backend - need to set-up osrm first - see routing vignette
+route(pct::wight_lines_30, route_fun = osrm::osrmRoute, point_input = TRUE)
+# with cyclestreets backend - need to set-up osrm first - see routing vignette
+route(pct::wight_lines_30, route_fun = cyclestreets::journey, point_input = TRUE)
 }
 }
 \seealso{
-Other routes: \code{\link{line2routeRetry}},
-  \code{\link{line2route}}, \code{\link{nearest2spdf}},
-  \code{\link{route_cyclestreet}},
-  \code{\link{route_dodgr}},
-  \code{\link{route_graphhopper}},
-  \code{\link{route_local}}, \code{\link{route_osrm}},
-  \code{\link{route_transportapi_public}},
-  \code{\link{viaroute2sldf}}, \code{\link{viaroute}}
+Other routes: 
+\code{\link{line2routeRetry}()},
+\code{\link{line2route}()},
+\code{\link{route_cyclestreet}()},
+\code{\link{route_dodgr}()},
+\code{\link{route_graphhopper}()},
+\code{\link{route_local}()},
+\code{\link{route_transportapi_public}()}
 }
 \concept{routes}

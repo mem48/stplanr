@@ -4,9 +4,14 @@
 \alias{dist_google}
 \title{Return travel network distances and time using the Google Maps API}
 \usage{
-dist_google(from, to, google_api = Sys.getenv("GOOGLEDIST"),
-  g_units = "metric", mode = c("bicycling", "walking", "driving",
-  "transit"), arrival_time = "")
+dist_google(
+  from,
+  to,
+  google_api = Sys.getenv("GOOGLEDIST"),
+  g_units = "metric",
+  mode = c("bicycling", "walking", "driving", "transit"),
+  arrival_time = ""
+)
 }
 \arguments{
 \item{from}{Two-column matrix or data frame of coordinates representing
@@ -76,13 +81,22 @@ dist_google(c("Hereford"), c("Weobley", "Leominster", "Kington"),
 }
 }
 \seealso{
-Other od: \code{\link{od2line}}, \code{\link{od2odf}},
-  \code{\link{od_aggregate_from}},
-  \code{\link{od_aggregate_to}},
-  \code{\link{od_aggregate}}, \code{\link{od_coords2line}},
-  \code{\link{od_coords}}, \code{\link{od_dist}},
-  \code{\link{od_radiation}}, \code{\link{od_to_odmatrix}},
-  \code{\link{odmatrix_to_od}}, \code{\link{points2flow}},
-  \code{\link{points2odf}}, \code{\link{sp_aggregate}}
+Other od: 
+\code{\link{od2line}()},
+\code{\link{od2odf}()},
+\code{\link{od_aggregate_from}()},
+\code{\link{od_aggregate_to}()},
+\code{\link{od_aggregate}()},
+\code{\link{od_coords2line}()},
+\code{\link{od_coords}()},
+\code{\link{od_dist}()},
+\code{\link{od_id}},
+\code{\link{od_oneway}()},
+\code{\link{od_radiation}()},
+\code{\link{od_to_odmatrix}()},
+\code{\link{odmatrix_to_od}()},
+\code{\link{points2flow}()},
+\code{\link{points2odf}()},
+\code{\link{sp_aggregate}()}
 }
 \concept{od}

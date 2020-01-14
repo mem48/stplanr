@@ -4,14 +4,21 @@
 \alias{od_aggregate}
 \title{Aggregate OD data between polygon geometries}
 \usage{
-od_aggregate(flow, zones, aggzones, aggzone_points = NULL,
-  cols = FALSE, aggcols = FALSE, FUN = sum,
+od_aggregate(
+  flow,
+  zones,
+  aggzones,
+  aggzone_points = NULL,
+  cols = FALSE,
+  aggcols = FALSE,
+  FUN = sum,
   prop_by_area = ifelse(identical(FUN, mean) == FALSE, TRUE, FALSE),
-  digits = getOption("digits"))
+  digits = getOption("digits")
+)
 }
 \arguments{
-\item{flow}{A data frame representing the flow between two points
-or zones. The first two columns of this data frame should correspond
+\item{flow}{A data frame representing origin-destination data.
+The first two columns of this data frame should correspond
 to the first column of the data in the zones. Thus in \code{\link[=cents]{cents()}},
 the first column is geo_code. This corresponds to the first two columns
 of \code{\link[=flow]{flow()}}.}
@@ -69,13 +76,22 @@ plot(flowlines, lwd = flowlines$Bicycle)
 plot(od_sf_agg$geometry, lwd = od_sf_agg$Bicycle, add = TRUE, col = "red")
 }
 \seealso{
-Other od: \code{\link{dist_google}}, \code{\link{od2line}},
-  \code{\link{od2odf}}, \code{\link{od_aggregate_from}},
-  \code{\link{od_aggregate_to}},
-  \code{\link{od_coords2line}}, \code{\link{od_coords}},
-  \code{\link{od_dist}}, \code{\link{od_radiation}},
-  \code{\link{od_to_odmatrix}},
-  \code{\link{odmatrix_to_od}}, \code{\link{points2flow}},
-  \code{\link{points2odf}}, \code{\link{sp_aggregate}}
+Other od: 
+\code{\link{dist_google}()},
+\code{\link{od2line}()},
+\code{\link{od2odf}()},
+\code{\link{od_aggregate_from}()},
+\code{\link{od_aggregate_to}()},
+\code{\link{od_coords2line}()},
+\code{\link{od_coords}()},
+\code{\link{od_dist}()},
+\code{\link{od_id}},
+\code{\link{od_oneway}()},
+\code{\link{od_radiation}()},
+\code{\link{od_to_odmatrix}()},
+\code{\link{odmatrix_to_od}()},
+\code{\link{points2flow}()},
+\code{\link{points2odf}()},
+\code{\link{sp_aggregate}()}
 }
 \concept{od}

@@ -7,10 +7,10 @@
 points2flow(p)
 }
 \arguments{
-\item{p}{SpatialPointsDataFrame}
+\item{p}{A spatial (point) object}
 }
 \description{
-Takes a series of geographical points and converts them into a SpatialLinesDataFrame
+Takes a series of geographical points and converts them into a spatial (linestring) object
 representing the potential flows, or 'spatial interaction', between every combination
 of points.
 }
@@ -23,13 +23,22 @@ flow_sf <- points2flow(cents_sf)
 plot(flow_sf)
 }
 \seealso{
-Other od: \code{\link{dist_google}}, \code{\link{od2line}},
-  \code{\link{od2odf}}, \code{\link{od_aggregate_from}},
-  \code{\link{od_aggregate_to}},
-  \code{\link{od_aggregate}}, \code{\link{od_coords2line}},
-  \code{\link{od_coords}}, \code{\link{od_dist}},
-  \code{\link{od_radiation}}, \code{\link{od_to_odmatrix}},
-  \code{\link{odmatrix_to_od}}, \code{\link{points2odf}},
-  \code{\link{sp_aggregate}}
+Other od: 
+\code{\link{dist_google}()},
+\code{\link{od2line}()},
+\code{\link{od2odf}()},
+\code{\link{od_aggregate_from}()},
+\code{\link{od_aggregate_to}()},
+\code{\link{od_aggregate}()},
+\code{\link{od_coords2line}()},
+\code{\link{od_coords}()},
+\code{\link{od_dist}()},
+\code{\link{od_id}},
+\code{\link{od_oneway}()},
+\code{\link{od_radiation}()},
+\code{\link{od_to_odmatrix}()},
+\code{\link{odmatrix_to_od}()},
+\code{\link{points2odf}()},
+\code{\link{sp_aggregate}()}
 }
 \concept{od}

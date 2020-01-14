@@ -21,22 +21,34 @@ Returns a boolean vector. TRUE means that the associated line is in fact a point
 (has no distance). This can be useful for removing data that will not be plotted.
 }
 \examples{
-data(flowlines)
-b1 <- line_bearing(flowlines)
-b2 <- line_bearing(flowlines, bidirectional = TRUE)
-plot(b1, b2)
-line_bearing(flowlines_sf[1:9, ])
+bearings_sf_1_9 <- line_bearing(flowlines_sf[1:5, ])
+bearings_sf_1_9 # lines of 0 length have NaN bearing
+bearings_sp_1_9 <- line_bearing(flowlines[1:5, ])
+bearings_sp_1_9
+plot(bearings_sf_1_9, bearings_sp_1_9)
+line_bearing(flowlines_sf[1:5, ], bidirectional = TRUE)
+line_bearing(flowlines[1:5, ], bidirectional = TRUE)
 }
 \seealso{
-Other lines: \code{\link{angle_diff}},
-  \code{\link{geo_toptail}}, \code{\link{is_linepoint}},
-  \code{\link{line2df}}, \code{\link{line_match}},
-  \code{\link{line_midpoint}}, \code{\link{line_sample}},
-  \code{\link{line_segment}}, \code{\link{line_via}},
-  \code{\link{mats2line}}, \code{\link{n_sample_length}},
-  \code{\link{n_vertices}}, \code{\link{onewaygeo}},
-  \code{\link{onewayid}}, \code{\link{points2line}},
-  \code{\link{toptail_buff}}, \code{\link{toptailgs}},
-  \code{\link{update_line_geometry}}
+Other lines: 
+\code{\link{angle_diff}()},
+\code{\link{geo_toptail}()},
+\code{\link{is_linepoint}()},
+\code{\link{line2df}()},
+\code{\link{line2points}()},
+\code{\link{line_match}()},
+\code{\link{line_midpoint}()},
+\code{\link{line_sample}()},
+\code{\link{line_segment}()},
+\code{\link{line_via}()},
+\code{\link{mats2line}()},
+\code{\link{n_sample_length}()},
+\code{\link{n_vertices}()},
+\code{\link{onewaygeo}()},
+\code{\link{onewayid}()},
+\code{\link{points2line}()},
+\code{\link{toptail_buff}()},
+\code{\link{toptailgs}()},
+\code{\link{update_line_geometry}()}
 }
 \concept{lines}

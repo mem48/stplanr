@@ -4,8 +4,15 @@
 \alias{route_graphhopper}
 \title{Plan a route with the graphhopper routing engine}
 \usage{
-route_graphhopper(from, to, l = NULL, vehicle = "bike",
-  silent = TRUE, pat = NULL, base_url = "https://graphhopper.com")
+route_graphhopper(
+  from,
+  to,
+  l = NULL,
+  vehicle = "bike",
+  silent = TRUE,
+  pat = NULL,
+  base_url = "https://graphhopper.com"
+)
 }
 \arguments{
 \item{from}{Text string or coordinates (a numeric vector of
@@ -62,8 +69,8 @@ Where \code{url} is an example api request from
 from <- c(-0.12, 51.5)
 to <- c(-0.14, 51.5)
 r1 <- route_graphhopper(from = from, to = to, silent = FALSE)
-r2 <- route_graphhopper("London Eye", "Westminster", vehicle = "foot")
-r3 <- route_graphhopper("London Eye", "Westminster", vehicle = "car")
+r2 <- route_graphhopper(from = from, to = to, silent = FALSE, vehicle = "foot")
+r3 <- route_graphhopper(from = from, to = to, silent = FALSE, vehicle = "car")
 plot(r1)
 plot(r2, add = TRUE, col = "blue") # compare routes
 plot(r3, add = TRUE, col = "red")
@@ -72,13 +79,13 @@ plot(r3, add = TRUE, col = "red")
 \seealso{
 route_cyclestreet
 
-Other routes: \code{\link{line2routeRetry}},
-  \code{\link{line2route}}, \code{\link{nearest2spdf}},
-  \code{\link{route_cyclestreet}},
-  \code{\link{route_dodgr}}, \code{\link{route_local}},
-  \code{\link{route_osrm}},
-  \code{\link{route_transportapi_public}},
-  \code{\link{route}}, \code{\link{viaroute2sldf}},
-  \code{\link{viaroute}}
+Other routes: 
+\code{\link{line2routeRetry}()},
+\code{\link{line2route}()},
+\code{\link{route_cyclestreet}()},
+\code{\link{route_dodgr}()},
+\code{\link{route_local}()},
+\code{\link{route_transportapi_public}()},
+\code{\link{route}()}
 }
 \concept{routes}

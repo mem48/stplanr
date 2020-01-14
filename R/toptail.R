@@ -34,7 +34,7 @@ geo_toptail.Spatial <- toptail <- function(l, toptail_dist, ...) {
     stop("toptail_dist is vector but not of equal length to spatial object")
   }
 
-  lpoints <- line_to_points(l)
+  lpoints <- line2points(l)
 
   if (length(toptail_dist) == 1) {
     toptail_dist <- rep(toptail_dist, length(l))
@@ -80,20 +80,8 @@ geo_toptail.sf <- function(l, toptail_dist, ...) {
 #' @inheritParams geo_buffer
 #' @family geo
 #' @export
-#' @examples
-#' r <- routes_fast[1:3, ]
-#' buff <- buff_geo(r, width = 100)
-#' plot(buff)
-#' plot(r, add = TRUE)
-#' # Test it works the same on projected data
-#' shp <- sp::spTransform(r, sp::CRS("+init=epsg:27700"))
-#' buff2 <- buff_geo(shp, 50) # test if it works the same on projected data
-#' plot(buff2)
-#' plot(r, add = TRUE) # note they do not show
-#' buff3 <- sp::spTransform(buff2, sp::CRS("+init=epsg:4326"))
-#' plot(buff)
-#' plot(buff3, add = TRUE, col = "black")
 buff_geo <- function(shp, width, ...) {
+  .Deprecated(new = "geo_buffer")
   gprojected(shp = shp, fun = rgeos::gBuffer, width = width, ...)
 }
 #' Clip the first and last n metres of SpatialLines

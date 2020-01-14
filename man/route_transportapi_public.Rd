@@ -4,8 +4,14 @@
 \alias{route_transportapi_public}
 \title{Plan a single route with TransportAPI.com}
 \usage{
-route_transportapi_public(from, to, silent = FALSE,
-  region = "southeast", modes = NA, not_modes = NA)
+route_transportapi_public(
+  from,
+  to,
+  silent = FALSE,
+  region = "southeast",
+  modes = NA,
+  not_modes = NA
+)
 }
 \arguments{
 \item{from}{Text string or coordinates (a numeric vector of
@@ -60,13 +66,13 @@ plot(rq_hfd)
 \seealso{
 line2route
 
-Other routes: \code{\link{line2routeRetry}},
-  \code{\link{line2route}}, \code{\link{nearest2spdf}},
-  \code{\link{route_cyclestreet}},
-  \code{\link{route_dodgr}},
-  \code{\link{route_graphhopper}},
-  \code{\link{route_local}}, \code{\link{route_osrm}},
-  \code{\link{route}}, \code{\link{viaroute2sldf}},
-  \code{\link{viaroute}}
+Other routes: 
+\code{\link{line2routeRetry}()},
+\code{\link{line2route}()},
+\code{\link{route_cyclestreet}()},
+\code{\link{route_dodgr}()},
+\code{\link{route_graphhopper}()},
+\code{\link{route_local}()},
+\code{\link{route}()}
 }
 \concept{routes}

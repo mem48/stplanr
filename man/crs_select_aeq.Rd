@@ -21,7 +21,9 @@ The function is based on this stackexchange answer:
 }
 \examples{
 data("routes_fast")
-new_crs <- crs_select_aeq(routes_fast)
+new_crs <- geo_select_aeq(routes_fast)
+new_crs2 <- geo_select_aeq(routes_fast) # to be deprecated
+identical(new_crs, new_crs2)
 plot(routes_fast)
 rf_projected <- sp::spTransform(routes_fast, new_crs)
 plot(rf_projected)
@@ -31,11 +33,15 @@ plot(line_length, rf_projected$length)
 cor(line_length, rf_projected$length)
 }
 \seealso{
-Other geo: \code{\link{bbox_scale}},
-  \code{\link{buff_geo}}, \code{\link{decode_gl}},
-  \code{\link{gclip}}, \code{\link{geo_bb_matrix}},
-  \code{\link{geo_bb}}, \code{\link{mapshape_available}},
-  \code{\link{mapshape}}, \code{\link{quadrant}},
-  \code{\link{reproject}}
+Other geo: 
+\code{\link{bbox_scale}()},
+\code{\link{buff_geo}()},
+\code{\link{gclip}()},
+\code{\link{geo_bb_matrix}()},
+\code{\link{geo_bb}()},
+\code{\link{mapshape_available}()},
+\code{\link{mapshape}()},
+\code{\link{quadrant}()},
+\code{\link{reproject}()}
 }
 \concept{geo}

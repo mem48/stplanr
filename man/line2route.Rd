@@ -4,11 +4,18 @@
 \alias{line2route}
 \title{Convert straight OD data (desire lines) into routes}
 \usage{
-line2route(l, route_fun = stplanr::route_cyclestreet, n_print = 10,
-  list_output = FALSE, l_id = NA, time_delay = 0, ...)
+line2route(
+  l,
+  route_fun = stplanr::route_cyclestreet,
+  n_print = 10,
+  list_output = FALSE,
+  l_id = NA,
+  time_delay = 0,
+  ...
+)
 }
 \arguments{
-\item{l}{A SpatialLinesDataFrame}
+\item{l}{A spatial (linestring) object}
 
 \item{route_fun}{A routing function to be used for converting the straight lines to routes
 \code{\link[=od2line]{od2line()}}}
@@ -16,7 +23,7 @@ line2route(l, route_fun = stplanr::route_cyclestreet, n_print = 10,
 \item{n_print}{A number specifying how frequently progress updates
 should be shown}
 
-\item{list_output}{If FALSE (default) assumes SpatialLinesDataFrame output. Set to TRUE to save output as a list.}
+\item{list_output}{If FALSE (default) assumes spatial (linestring) object output. Set to TRUE to save output as a list.}
 
 \item{l_id}{Character string naming the id field from the input lines data,
 typically the origin and destination ids pasted together. If absent, the row name of the
@@ -35,7 +42,6 @@ Convert straight OD data (desire lines) into routes
 See \code{\link[=route_cyclestreet]{route_cyclestreet()}} and other route functions for details.
 
 A parallel implementation of this was available until version 0.1.8.
-See \href{https://github.com/ropensci/stplanr/blob/18a598674bb378d5577050178da1561489496157/R/od-funs.R}{github.com/ropensci/stplanr} for details.
 }
 
 \examples{
@@ -61,14 +67,13 @@ line2route(l[1, ], route_graphhopper)
 }
 }
 \seealso{
-Other routes: \code{\link{line2routeRetry}},
-  \code{\link{nearest2spdf}},
-  \code{\link{route_cyclestreet}},
-  \code{\link{route_dodgr}},
-  \code{\link{route_graphhopper}},
-  \code{\link{route_local}}, \code{\link{route_osrm}},
-  \code{\link{route_transportapi_public}},
-  \code{\link{route}}, \code{\link{viaroute2sldf}},
-  \code{\link{viaroute}}
+Other routes: 
+\code{\link{line2routeRetry}()},
+\code{\link{route_cyclestreet}()},
+\code{\link{route_dodgr}()},
+\code{\link{route_graphhopper}()},
+\code{\link{route_local}()},
+\code{\link{route_transportapi_public}()},
+\code{\link{route}()}
 }
 \concept{routes}

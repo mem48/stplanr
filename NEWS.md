@@ -1,8 +1,60 @@
-# stplanr (development version)
+# stplanr 0.4.1.9000
+
+- `route_graphhopper()` should now work with a local graphhopper instance. See https://github.com/ropensci/stplanr/pull/369
+
+## BUG FIXES
+
+- `destination` now works as an argument in `line2route()` (#368)
+- `overline()` now accepts `sf` objects regardless of the name of the geometry column
+
+# stplanr 0.4.1
+
+## NEW FEATURES
+
+- Better error messages if `od2line()` fails due to non-matching ids
+- Improved documentation of `od2line()` in the vignette: https://docs.ropensci.org/stplanr/articles/stplanr-od.html#non-matching-ids
+
+# stplanr 0.4.0
+
+## NEW FEATURES
+
+- A family of new functions, including `route_split()`, `rnet_add_node()` and `sln_add_node()` for adding new nodes to routes, route networks and `sfNetwork` objects, closing [#342](https://github.com/ropensci/stplanr/issues/342)
+- Updated vignette on route networks, solving [#237](https://github.com/ropensci/stplanr/issues/237), which can be found here: https://docs.ropensci.org/stplanr/articles/stplanr-route-nets.html
+- [Fix](https://github.com/ropensci/stplanr/commit/592fba2a6d191135d036af73e7c902c3ef4f758c) in `line2points()`
+- `line_to_points()` function removed in favour of `line2point()`.
+- New function `sln_clean_graph()` removes unconnected elements of `sfNetwork` objects. Credit to Andrea Gilardi. See (#344).
+- New functions `rnet_breakup_vertices()` and `line2vertices()` for breaking up linestrings representing route networks into smaller segments, in preparation for routing. See (#282) (which these functions address) and PR [347](https://github.com/ropensci/stplanr/pull/347) for details.
+
+## BUG FIXES
+
+- Bugs in `route_dodgr()` and associated examples fixed (#348)
+- Annoying message printed on load removed (#355)
+
+## OTHER
+
+- Andrea Gilardi added as author.
+- Deprecated functions related to road crash (STATS19) data removed
+
+# stplanr 0.3.1
+
+- stplanr now has a logo! See [#334](https://github.com/ropensci/stplanr/issues/334)
+- `line_to_points()` depreciated in favour of `od2line()`, the latter function name being more consistent with the package's other functions
+- `line2pointsn()` now works with `sf` objects
+- Documentation fixes - see [#329](https://github.com/ropensci/stplanr/issues/329)
+
+## OTHER
+
+- Various improvements made to the `stplanr-od` vignette, thanks to Edward Leigh
+- URLs updated to link to stplanr's new, official website: https://docs.ropensci.org/stplanr/
 
 # stplanr 0.3.0
 
-- New functions `od_to_odmatrix()` and `odmatrix_to_od()` to convert between matrix forms of origin-destination data.
+## NEW FEATURES
+
+- New functions `od_to_odmatrix()` and `odmatrix_to_od()` to convert between matrix forms of origin-destination data
+- New function `od_oneway()` replaces `onewayid()`, works better and is twice as fast
+- New `od_id*()` functions provide a range of ways to convert origin-destination pair IDs into a single ID. See [Stackoverflow](https://stackoverflow.com/questions/57235601/how-to-identify-duplicated-ordered-pairs-efficiently/57236658#57236658) and the [issue tracker](https://github.com/ropensci/stplanr/issues/321)
+- New vignette [`stplanr-od`](https://docs.ropensci.org/stplanr/articles/stplanr-od.html) provides detailed documentation on the package's OD data handling capabilities
 
 # stplanr 0.2.10
 

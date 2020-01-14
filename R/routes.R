@@ -49,8 +49,6 @@
 #'
 #' Read more about the .Renviron here: `?.Renviron`
 #'
-#'
-#' @inheritParams line2route
 #' @param base_url The base url from which to construct API requests
 #' (with default set to main server)
 #' @param reporterrors Boolean value (TRUE/FALSE) indicating if cyclestreets (TRUE by default).
@@ -229,13 +227,15 @@ route_cyclestreet <-
 #' from <- c(-0.12, 51.5)
 #' to <- c(-0.14, 51.5)
 #' r1 <- route_graphhopper(from = from, to = to, silent = FALSE)
-#' r2 <- route_graphhopper("London Eye", "Westminster", vehicle = "foot")
-#' r3 <- route_graphhopper("London Eye", "Westminster", vehicle = "car")
+#' r2 <- route_graphhopper(from = from, to = to, silent = FALSE, vehicle = "foot")
+#' r3 <- route_graphhopper(from = from, to = to, silent = FALSE, vehicle = "car")
 #' plot(r1)
 #' plot(r2, add = TRUE, col = "blue") # compare routes
 #' plot(r3, add = TRUE, col = "red")
 #' }
-route_graphhopper <- function(from, to, l = NULL, vehicle = "bike", silent = TRUE, pat = NULL, base_url = "https://graphhopper.com") {
+route_graphhopper <- function(from, to, l = NULL, vehicle = "bike",
+                              silent = TRUE, pat = NULL,
+                              base_url = "https://graphhopper.com") {
 
   # Convert character strings to lon/lat if needs be
   coords <- od_coords(from, to, l)
@@ -320,7 +320,7 @@ api_pat <- function(api_name, force = FALSE) {
 
   if (!interactive()) {
     stop(paste0("Set the environment variable ", api_name_caps, " e.g. with .Renviron or Sys.setenv()"),
-      call. = FALSE
+         call. = FALSE
     )
   }
 

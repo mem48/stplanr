@@ -7,20 +7,21 @@
 od_aggregate_from(flow, attrib = NULL, FUN = sum, ..., col = 1)
 }
 \arguments{
-\item{flow}{A data frame representing the flow between two points
-or zones. The first two columns of this data frame should correspond
+\item{flow}{A data frame representing origin-destination data.
+The first two columns of this data frame should correspond
 to the first column of the data in the zones. Thus in \code{\link[=cents]{cents()}},
 the first column is geo_code. This corresponds to the first two columns
 of \code{\link[=flow]{flow()}}.}
 
 \item{attrib}{A character vector corresponding to the variables in
-\code{sl$} on which the function(s) will operate.}
+\verb{sl$} on which the function(s) will operate.}
 
 \item{FUN}{A function to summarise OD data by}
 
 \item{...}{Additional arguments passed to \code{FUN}}
 
-\item{col}{The column that the OD dataset is grouped by (1 by default, the first column usually represents the origin)}
+\item{col}{The column that the OD dataset is grouped by
+(1 by default, the first column usually represents the origin)}
 }
 \description{
 This function takes a data frame of OD data and
@@ -35,12 +36,22 @@ By default, if \code{attrib} is not set, it summarises all numeric columns.
 od_aggregate_from(flow)
 }
 \seealso{
-Other od: \code{\link{dist_google}}, \code{\link{od2line}},
-  \code{\link{od2odf}}, \code{\link{od_aggregate_to}},
-  \code{\link{od_aggregate}}, \code{\link{od_coords2line}},
-  \code{\link{od_coords}}, \code{\link{od_dist}},
-  \code{\link{od_radiation}}, \code{\link{od_to_odmatrix}},
-  \code{\link{odmatrix_to_od}}, \code{\link{points2flow}},
-  \code{\link{points2odf}}, \code{\link{sp_aggregate}}
+Other od: 
+\code{\link{dist_google}()},
+\code{\link{od2line}()},
+\code{\link{od2odf}()},
+\code{\link{od_aggregate_to}()},
+\code{\link{od_aggregate}()},
+\code{\link{od_coords2line}()},
+\code{\link{od_coords}()},
+\code{\link{od_dist}()},
+\code{\link{od_id}},
+\code{\link{od_oneway}()},
+\code{\link{od_radiation}()},
+\code{\link{od_to_odmatrix}()},
+\code{\link{odmatrix_to_od}()},
+\code{\link{points2flow}()},
+\code{\link{points2odf}()},
+\code{\link{sp_aggregate}()}
 }
 \concept{od}

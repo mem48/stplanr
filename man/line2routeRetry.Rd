@@ -2,22 +2,23 @@
 % Please edit documentation in R/od-funs.R
 \name{line2routeRetry}
 \alias{line2routeRetry}
-\title{Convert straight SpatialLinesDataFrame from flow data into routes retrying
+\title{Convert straight spatial (linestring) object from flow data into routes retrying
 on connection (or other) intermittent failures}
 \usage{
 line2routeRetry(lines, pattern = "^Error: ", n_retry = 3, ...)
 }
 \arguments{
-\item{lines}{A SpatialLinesDataFrame}
+\item{lines}{A spatial (linestring) object}
 
-\item{pattern}{A regex that the error messages must not match to be retried, default "^Error: " i.e. do not retry errors starting with "Error: "}
+\item{pattern}{A regex that the error messages must not match to be retried, default
+"^Error: " i.e. do not retry errors starting with "Error: "}
 
 \item{n_retry}{Number of times to retry}
 
 \item{...}{Arguments passed to the routing function, e.g. \code{\link[=route_cyclestreet]{route_cyclestreet()}}}
 }
 \description{
-Convert straight SpatialLinesDataFrame from flow data into routes retrying
+Convert straight spatial (linestring) object from flow data into routes retrying
 on connection (or other) intermittent failures
 }
 \section{Details}{
@@ -33,14 +34,13 @@ rf_list <- line2routeRetry(flowlines[1:2, ], pattern = "nonexistanceerror", sile
 }
 }
 \seealso{
-Other routes: \code{\link{line2route}},
-  \code{\link{nearest2spdf}},
-  \code{\link{route_cyclestreet}},
-  \code{\link{route_dodgr}},
-  \code{\link{route_graphhopper}},
-  \code{\link{route_local}}, \code{\link{route_osrm}},
-  \code{\link{route_transportapi_public}},
-  \code{\link{route}}, \code{\link{viaroute2sldf}},
-  \code{\link{viaroute}}
+Other routes: 
+\code{\link{line2route}()},
+\code{\link{route_cyclestreet}()},
+\code{\link{route_dodgr}()},
+\code{\link{route_graphhopper}()},
+\code{\link{route_local}()},
+\code{\link{route_transportapi_public}()},
+\code{\link{route}()}
 }
 \concept{routes}

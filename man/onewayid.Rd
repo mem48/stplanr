@@ -6,14 +6,29 @@
 \alias{onewayid.SpatialLines}
 \title{Aggregate ods so they become non-directional}
 \usage{
-onewayid(x, attrib, id1 = names(x)[1], id2 = names(x)[2],
-  stplanr.key = od_id_order(x, id1, id2))
+onewayid(
+  x,
+  attrib,
+  id1 = names(x)[1],
+  id2 = names(x)[2],
+  stplanr.key = od_id_order(x, id1, id2)
+)
 
-\method{onewayid}{data.frame}(x, attrib, id1 = names(x)[1],
-  id2 = names(x)[2], stplanr.key = od_id_order(x, id1, id2))
+\method{onewayid}{data.frame}(
+  x,
+  attrib,
+  id1 = names(x)[1],
+  id2 = names(x)[2],
+  stplanr.key = od_id_order(x, id1, id2)
+)
 
-\method{onewayid}{SpatialLines}(x, attrib, id1 = names(x)[1],
-  id2 = names(x)[2], stplanr.key = od_id_order(x, id1, id2))
+\method{onewayid}{SpatialLines}(
+  x,
+  attrib,
+  id1 = names(x)[1],
+  id2 = names(x)[2],
+  stplanr.key = od_id_order(x, id1, id2)
+)
 }
 \arguments{
 \item{x}{A data frame or SpatialLinesDataFrame, representing an OD matrix}
@@ -52,7 +67,6 @@ identical geometries (see \code{\link[=flowlines]{flowlines()}}) which can be co
 for users and are difficult to plot.
 }
 \examples{
-data(flow)
 flow_oneway <- onewayid(flow, attrib = 3)
 nrow(flow_oneway) < nrow(flow) # result has fewer rows
 sum(flow$All) == sum(flow_oneway$All) # but the same total flow
@@ -65,7 +79,9 @@ colSums(flow_oneway[attrib]) == colSums(flow[attrib]) # test if the colSums are 
 # Demonstrate the results from onewayid and onewaygeo are identical
 flow_oneway_geo <- onewaygeo(flowlines, attrib = attrib)
 plot(flow_oneway$All, flow_oneway_geo$All)
-onewayid(flowlines_sf, "all")
+flow_oneway_sf <- onewayid(flowlines_sf, 3)
+plot(flow_oneway_geo, lwd = flow_oneway_geo$All / mean(flow_oneway_geo$All))
+plot(flow_oneway_sf$geometry, lwd = flow_oneway_sf$All / mean(flow_oneway_sf$All))
 # with spatial data
 data(flowlines)
 fo <- onewayid(flowlines, attrib = "All")
@@ -81,15 +97,25 @@ plot(flowlines[which(f_over_n)[1], ], add = TRUE, col = "white", lwd = 10)
 plot(flowlines[which(f_over_n)[2], ], add = TRUE, lwd = 5)
 }
 \seealso{
-Other lines: \code{\link{angle_diff}},
-  \code{\link{geo_toptail}}, \code{\link{is_linepoint}},
-  \code{\link{line2df}}, \code{\link{line_bearing}},
-  \code{\link{line_match}}, \code{\link{line_midpoint}},
-  \code{\link{line_sample}}, \code{\link{line_segment}},
-  \code{\link{line_via}}, \code{\link{mats2line}},
-  \code{\link{n_sample_length}}, \code{\link{n_vertices}},
-  \code{\link{onewaygeo}}, \code{\link{points2line}},
-  \code{\link{toptail_buff}}, \code{\link{toptailgs}},
-  \code{\link{update_line_geometry}}
+Other lines: 
+\code{\link{angle_diff}()},
+\code{\link{geo_toptail}()},
+\code{\link{is_linepoint}()},
+\code{\link{line2df}()},
+\code{\link{line2points}()},
+\code{\link{line_bearing}()},
+\code{\link{line_match}()},
+\code{\link{line_midpoint}()},
+\code{\link{line_sample}()},
+\code{\link{line_segment}()},
+\code{\link{line_via}()},
+\code{\link{mats2line}()},
+\code{\link{n_sample_length}()},
+\code{\link{n_vertices}()},
+\code{\link{onewaygeo}()},
+\code{\link{points2line}()},
+\code{\link{toptail_buff}()},
+\code{\link{toptailgs}()},
+\code{\link{update_line_geometry}()}
 }
 \concept{lines}
