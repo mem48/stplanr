@@ -22,10 +22,7 @@
 islines <- function(g1, g2) {
   UseMethod("islines")
 }
-islines.Spatial <- function(g1, g2) {
-  ## return TRUE if geometries intersect as lines, not points
-  inherits(rgeos::gIntersection(g1, g2), "SpatialLines")
-}
+
 islines.sf <- function(g1, g2) {
   sf::st_geometry_type(sf::st_intersection(sf::st_geometry(g1), sf::st_geometry(g2))) == "MULTILINESTRING"
 }
@@ -57,16 +54,7 @@ islines.sf <- function(g1, g2) {
 gsection <- function(sl, buff_dist = 0) {
   UseMethod("gsection")
 }
-#' @export
-gsection.Spatial <- function(sl, buff_dist = 0) {
-  if (buff_dist > 0) {
-    sl <- geo_toptail(sl, toptail_dist = buff_dist)
-  }
-  overlapping <- rgeos::gOverlaps(sl, byid = T)
-  u <- rgeos::gUnion(sl, sl)
-  u_merged <- rgeos::gLineMerge(u)
-  sp::disaggregate(u_merged)
-}
+
 #' @export
 gsection.sf <- function(sl, buff_dist = 0) {
   if (buff_dist > 0) {
@@ -140,58 +128,7 @@ overline.sf <- function(sl, attrib, fun = sum, na.zero = FALSE, buff_dist = 0) {
   overline2(x = sl, attrib = attrib)
 
 }
-#' @export
-overline.Spatial <- function(sl, attrib, fun = sum, na.zero = FALSE, buff_dist = 0) {
-  fun <- c(fun)
-  if (length(fun) < length(attrib)) {
-    fun <- rep(c(fun), length.out = length(attrib))
-  }
 
-  sl_sp <- as(sl, "SpatialLines")
-
-  ## get the line sections that make the network
-  slu <- gsection(sl, buff_dist = buff_dist)
-  ## overlay network with routes
-  overs <- sp::over(slu, sl_sp, returnList = TRUE)
-  ## overlay is true if end points overlay, so filter them out:
-  overs <- lapply(1:length(overs), function(islu) {
-    Filter(function(isl) {
-      islines(sl_sp[isl, ], slu[islu, ])
-    }, overs[[islu]])
-  })
-  ## now aggregate the required attribibute using fun():
-  # aggs = sapply(overs, function(os){fun(sl[[attrib]][os])})
-  aggs <- setNames(
-    as.data.frame(
-      lapply(
-        1:length(attrib),
-        function(y, overs, attribs, aggfuns) {
-          sapply(overs, function(os, attrib, fun2) {
-            fun2(sl[[attrib]][os])
-          },
-          attrib = attribs[y],
-          fun2 = aggfuns[[y]]
-          )
-        },
-        overs,
-        attrib,
-        fun
-      )
-    ),
-    attrib
-  )
-
-  ## make a sl with the named attribibute:
-  sl <- sp::SpatialLinesDataFrame(slu, aggs)
-  # names(sl) = attrib
-
-  ## remove lines with attribute values of zero
-  if (na.zero) {
-    sl <- sl[sl[[attrib]] > 0, ]
-  }
-
-  sl
-}
 
 #' Aggregate flows so they become non-directional (by geometry - the slow way)
 #'
@@ -245,33 +182,7 @@ onewaygeo.sf <- function(x, attrib) {
 
   return(singlelines)
 }
-#' @export
-onewaygeo.Spatial <- function(x, attrib) {
-  geq <- rgeos::gEquals(x, x, byid = TRUE) | rgeos::gEqualsExact(x, x, byid = TRUE)
-  sel1 <- !duplicated(geq) # repeated rows
-  singlelines <- x[sel1, ]
-  non_numeric_cols <- which(!sapply(x@data, is.numeric))
-  keeper_cols <- sort(unique(c(non_numeric_cols, attrib)))
 
-  singlelines@data[, attrib] <- (matrix(
-    unlist(
-      lapply(
-        apply(geq, 1, function(x) {
-          which(x == TRUE)
-        }),
-        function(y, x) {
-          colSums(x[y, attrib]@data)
-        }, x
-      )
-    ),
-    nrow = nrow(x),
-    byrow = TRUE
-  ))[sel1, ]
-
-  singlelines@data <- singlelines@data[keeper_cols]
-
-  return(singlelines)
-}
 
 #' Convert series of overlapping lines into a route network (new method)
 #'
@@ -466,68 +377,3 @@ overline2 = function(x, attrib, ncores = 1, simplify = TRUE, regionalise = 1e5){
 }
 
 
-#' Convert series of overlapping lines into a route network
-#'
-#' This function takes overlapping `LINESTRING`s stored in an
-#' `sf` object and returns a route network composed of non-overlapping
-#' geometries and aggregated values.
-#'
-#' @param sl An `sf` `LINESTRING` object with overlapping elements
-#' @inheritParams overline
-#' @export
-#' @examples
-#' routes_fast_sf$value = 1
-#' sl <- routes_fast_sf[4:6, ]
-#' attrib = c("value", "length")
-#' rnet = overline_intersection(sl = sl, attrib)
-#' plot(rnet, lwd = rnet$value)
-#' # A larger example
-#' sl <- routes_fast_sf[4:7, ]
-#' rnet = overline_intersection(sl = sl, attrib = c("value", "length"))
-#' plot(rnet, lwd = rnet$value)
-#' rnet_sf <- overline(routes_fast_sf[4:7, ], attrib = c("value", "length"), buff_dist = 10)
-#' plot(rnet_sf, lwd = rnet_sf$value)
-#'
-#' # An even larger example (not shown, takes time to run)
-#' # rnet = overline_intersection(routes_fast_sf, attrib = c("value", "length"))
-#' # rnet_sf <- overline(routes_fast_sf, attrib = c("value", "length"), buff_dist = 10)
-#' # plot(rnet$geometry, lwd = rnet$value * 2, col = "grey")
-#' # plot(rnet_sf$geometry,  lwd = rnet_sf$value, add = TRUE)
-overline_intersection <- function(sl, attrib, fun = sum, na.zero = FALSE, buff_dist = 0){
-  sl = sl[attrib]
-  sli = sf::st_intersection(sl)
-
-  # check it's all in there:
-  # sli_union = sf::st_union(sli)
-  # plot(sli_union, lwd = 9)
-  # plot(sl$geometry, add = T, col = "red")
-  # sl_difference = sf::st_difference(sl, sli)
-
-  gtypes = sf::st_geometry_type(sli)
-  sli_lines = sli[gtypes == "LINESTRING", ]
-  sli_mlines = sli[gtypes == "MULTILINESTRING", ]
-
-  if(any(gtypes == "GEOMETRYCOLLECTION")) {
-    sli_collections = sli[gtypes == "GEOMETRYCOLLECTION", ]
-    sli_clines = sf::st_collection_extract(sli_collections, "LINESTRING")
-    sli_lines = rbind(sli_lines, sli_clines)
-  }
-
-  # # Test plots:
-  # plot(sli_lines$geometry, lwd = sli_lines$n.overlaps * 2, col = "grey")
-  # plot(sli_mlines$geometry, add = TRUE, lwd = sli_mlines$n.overlaps)
-  # plot(sl$geometry, col = "red", add = TRUE)
-
-  # # removes many lines!
-  l_mlines = lapply(sli_mlines$geometry, sf::st_line_merge)
-  l_mlines_sfc = sf::st_sfc(l_mlines, crs = sf::st_crs(sl))
-  # plot(l_mlines_sfc)
-
-  l_mlines_data = lapply(attrib, function(a) {
-    vapply(sli_mlines$origins, function(i) fun(sl[[a]][i]), FUN.VALUE = numeric(1))
-  })
-  names(l_mlines_data) = attrib
-  mlines = sf::st_sf(l_mlines_data, geometry = l_mlines_sfc)
-  slines = sli_lines[attrib]
-  rbind(mlines, slines)
-}

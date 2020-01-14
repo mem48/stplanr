@@ -67,10 +67,6 @@ od_coords <- function(from = NULL, to = NULL, l = NULL) {
   }
 
   else {
-    # Convert sp object to lat/lon vector
-    if (is(object = from, "Spatial")) from <- sp::coordinates(from)
-    if (is(object = to, "Spatial")) to <- sp::coordinates(to)
-
     # sf objects
     if (is(object = from, "sf") | is(object = from, "sfc")) from <- sf::st_coordinates(from)
     if (is(object = to, "sf") | is(object = to, "sfc")) to <- sf::st_coordinates(to)
@@ -238,64 +234,7 @@ od2line.sf <- function(flow, zones, destinations = NULL,
   sf::st_sf(flow, geometry = odsfc$geometry)
 
 }
-#' @export
-od2line.Spatial <- function(flow, zones, destinations = NULL,
-                            zone_code = names(zones)[1],
-                            origin_code = names(flow)[1],
-                            dest_code = names(flow)[2],
-                            zone_code_d = NA, silent = TRUE) {
-  l <- vector("list", nrow(flow))
 
-  if (is.null(destinations)) {
-    if (!silent) {
-      message(paste(
-        "Matching", zone_code, "in the zones to", origin_code, "and", dest_code,
-        "for origins and destinations respectively"
-      ))
-    }
-    for (i in 1:nrow(flow)) {
-      from <- zones@data[[zone_code]] %in% flow[[origin_code]][i]
-      if (sum(from) == 0) {
-        warning(paste0("No match for line ", i))
-      }
-      to <- zones@data[[zone_code]] %in% flow[[dest_code]][i]
-      if (sum(to) == 0 & sum(from) == 1) {
-        warning(paste0("No match for line ", i))
-      }
-      x <- sp::coordinates(zones[from, ])
-      y <- sp::coordinates(zones[to, ])
-      l[[i]] <- sp::Lines(list(sp::Line(rbind(x, y))), as.character(i))
-    }
-  } else {
-    if (is.na(zone_code_d)) {
-      zone_code_d <- names(destinations)[1]
-    }
-    if (!silent) {
-      message(paste(
-        "Matching", zone_code, "in the zones and", zone_code_d, "in the destinations,\nto",
-        origin_code, "and", dest_code,
-        "for origins and destinations respectively"
-      ))
-    }
-    for (i in 1:nrow(flow)) {
-      from <- zones@data[[zone_code]] %in% flow[[origin_code]][i]
-      if (sum(from) == 0) {
-        warning(paste0("No match for line ", i))
-      }
-      to <- destinations@data[[zone_code_d]] %in% flow[[dest_code]][i]
-      if (sum(to) == 0 & sum(from) == 1) {
-        warning(paste0("No match for line ", i))
-      }
-      x <- sp::coordinates(zones[from, ])
-      y <- sp::coordinates(destinations[to, ])
-      l[[i]] <- sp::Lines(list(sp::Line(rbind(x, y))), as.character(i))
-    }
-  }
-  l <- sp::SpatialLines(l)
-  l <- sp::SpatialLinesDataFrame(l, data = flow, match.ID = FALSE)
-  sp::proj4string(l) <- sp::proj4string(zones)
-  l
-}
 
 #' @rdname od2line
 #' @export
@@ -341,13 +280,6 @@ line2df.sf <- function(l) {
       tx = dplyr::last(!!X), ty = dplyr::last(!!Y)
     )
 }
-#' @export
-line2df.Spatial <- function(l) {
-  ldf_geom <- raster::geom(l)
-  dplyr::group_by_(dplyr::as_data_frame(ldf_geom), "object") %>%
-    dplyr::summarise_(fx = quote(dplyr::first(x)), fy = quote(dplyr::first(y)),
-	tx = quote(dplyr::last(x)), ty = quote(dplyr::last(y)))
-}
 
 #' Convert a spatial (linestring) object to points
 #'
@@ -377,22 +309,7 @@ line2df.Spatial <- function(l) {
 line2points <- function(l, ids = rep(1:nrow(l))) {
   UseMethod("line2points")
 }
-#' @export
-line2points.Spatial <- function(l, ids = rep(1:nrow(l), each = 2)) {
-  for (i in 1:length(l)) {
-    lcoords <- sp::coordinates(l[i, ])[[1]][[1]]
-    pmat <- matrix(lcoords[c(1, nrow(lcoords)), ], nrow = 2)
-    lpoints <- sp::SpatialPoints(pmat)
-    if (i == 1) {
-      out <- lpoints
-    } else {
-      out <- raster::bind(out, lpoints)
-    }
-  }
-  sp::proj4string(out) <- sp::proj4string(l)
-  out <- sp::SpatialPointsDataFrame(coords = out, data = data.frame(id = ids))
-  out
-}
+
 #' @export
 line2points.sf <- function(l, ids = rep(1:nrow(l), each = 2)) {
   y_coords <- x_coords <- double(length = length(ids)) # initiate coords
@@ -412,13 +329,7 @@ line2points.sf <- function(l, ids = rep(1:nrow(l), each = 2)) {
 line2pointsn <- function(l) {
   UseMethod("line2pointsn")
 }
-#' @export
-line2pointsn.Spatial <- function(l) {
-  spdf <- raster::geom(l)
-  p <- sp::SpatialPoints(coords = spdf[, c("x", "y")])
-  raster::crs(p) <- raster::crs(l)
-  p
-}
+
 #' @export
 line2pointsn.sf <- function(l) {
   suppressWarnings(sf::st_cast(l, "POINT"))
@@ -630,21 +541,7 @@ points2odf.sf <- function(p) {
   names(odf) <- c("O", "D")
   odf
 }
-#' @export
-points2odf.Spatial <- function(p) {
-  if (grepl(pattern = "DataFrame", class(p))) {
-    geo_code <- p@data[, 1]
-  } else if (is(p, "SpatialPoints")) {
-    geo_code <- 1:length(p)
-  } else {
-    geo_code <- p[, 1]
-  }
-  odf <- data.frame(
-    expand.grid(geo_code, geo_code)[2:1]
-  )
-  names(odf) <- c("O", "D")
-  odf
-}
+
 #' Convert a series of points into geographical flows
 #'
 #' Takes a series of geographical points and converts them into a spatial (linestring) object

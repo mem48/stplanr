@@ -39,45 +39,4 @@ n_sample_length <- function(n, l_lengths, weights) {
   n_vec
 }
 
-#' Sample n points along lines with density proportional to a weight
-#'
-#' @param n The total number of points to sample
-#' @param l The SpatialLines object along which to create sample points
-#' @param weights The relative probabilities of lines being samples
-#' @family lines
-#' @export
-#' @examples
-#' l <- flowlines[2:5, ]
-#' n <- 100
-#' l_lengths <- line_length(l)
-#' weights <- l$All
-#' p <- line_sample(l, 50, weights)
-#' plot(p)
-#' p <- line_sample(l, 50, weights = 1:length(l))
-#' plot(p)
-line_sample <- function(l, n, weights) {
-  not_projected <- !sp::is.projected(l)
-  if (not_projected) {
-    crs_orig <- sp::proj4string(l)
-    if (is.na(crs_orig)) {
-      crs_orig <- sp::CRS("+init=epsg:4326")
-    }
-    crs_new <- geo_select_aeq(l)
-    l <- sp::spTransform(l, CRSobj = crs_new)
-  }
-  lsf <- sf::st_as_sf(l, "SpatialLinesDataFrame")
-  l_lengths <- sf::st_length(lsf)
-  l_lengths <- as.vector(l_lengths) # convert to numeric vector
-  n_vec <- n_sample_length(n, l_lengths, weights = weights)
-  psf <- sf::st_line_sample(lsf, n = n_vec)
 
-  # aim: group point collection into points - to update if possible
-  # class(psf) # its a MULIPOINT
-  psf_point <- as(psf, "Spatial")
-  psp <- as(psf, "Spatial")
-  psp <- sp::SpatialPoints(matrix(sp::coordinates(psp), ncol = 2), proj4string = sp::CRS(proj4string(psp)))
-  if (not_projected) {
-    psp <- sp::spTransform(psp, crs_orig)
-  }
-  return(psp)
-}

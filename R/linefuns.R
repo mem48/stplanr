@@ -16,10 +16,7 @@
 n_vertices <- function(l) {
   UseMethod("n_vertices")
 }
-#' @export
-n_vertices.Spatial <- function(l) {
-  sapply(l@lines, function(x) nrow(x@Lines[[1]]@coords))
-}
+
 #' @export
 n_vertices.sf <- function(l) {
   geoms <- sf::st_coordinates(l)
@@ -82,15 +79,7 @@ is_linepoint <- function(l) {
 line_bearing <- function(l, bidirectional = FALSE) {
   UseMethod("line_bearing")
 }
-#' @export
-line_bearing.Spatial <- function(l, bidirectional = FALSE) {
-  ldf <- line2df(l)
-  bearing <- geosphere::bearing(as.matrix(ldf[, c("fx", "fy")]), as.matrix(ldf[, c("tx", "ty")]))
-  if (bidirectional) {
-    bearing <- make_bidirectional(bearing)
-  }
-  bearing
-}
+
 #' @export
 line_bearing.sf <- function(l, bidirectional = FALSE) {
   p <- sf::st_geometry(line2points(l))
@@ -130,25 +119,7 @@ line_bearing.sf <- function(l, bidirectional = FALSE) {
 angle_diff <- function(l, angle, bidirectional = FALSE, absolute = TRUE) {
   UseMethod("angle_diff")
 }
-#' @export
-angle_diff.Spatial <- function(l, angle, bidirectional = FALSE, absolute = TRUE) {
-  if (is(object = l, "Spatial")) {
-    line_angles <- line_bearing(l)
-  } else {
-    line_angles <- l
-  }
-  angle_diff <- angle - line_angles
-  angle_diff[angle_diff <= -180] <- angle_diff[angle_diff <= -180] + 180
-  angle_diff[angle_diff >= 180] <- angle_diff[angle_diff >= 180] - 180
-  if (bidirectional) {
-    angle_diff[angle_diff <= -90] <- 180 + angle_diff[angle_diff <= -90]
-    angle_diff[angle_diff >= 90] <- 180 - angle_diff[angle_diff >= 90]
-  }
-  if (absolute) {
-    angle_diff <- abs(angle_diff)
-  }
-  angle_diff
-}
+
 #' @export
 angle_diff.sf <- function(l, angle, bidirectional = FALSE, absolute = TRUE) {
   l_sp <- as(l, "Spatial")
@@ -167,10 +138,7 @@ angle_diff.sf <- function(l, angle, bidirectional = FALSE, absolute = TRUE) {
 line_midpoint <- function(l) {
   UseMethod("line_midpoint")
 }
-#' @export
-line_midpoint.Spatial <- function(l) {
-  gprojected(l, maptools::SpatialLinesMidPoints)
-}
+
 #' @export
 line_midpoint.sf <- function(l) {
   l <- as(l, "Spatial")

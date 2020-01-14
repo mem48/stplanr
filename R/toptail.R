@@ -28,62 +28,14 @@
 geo_toptail <- function(l, toptail_dist, ...) {
   UseMethod("geo_toptail")
 }
-#' @export
-geo_toptail.Spatial <- toptail <- function(l, toptail_dist, ...) {
-  if (length(toptail_dist) > 1 & length(toptail_dist) != length(l)) {
-    stop("toptail_dist is vector but not of equal length to spatial object")
-  }
 
-  lpoints <- line2points(l)
-
-  if (length(toptail_dist) == 1) {
-    toptail_dist <- rep(toptail_dist, length(l))
-  }
-
-  for (i in 1:length(l)) {
-    sel_points <- lpoints[lpoints$id == i, ]
-
-    # Create buffer for geographic or projected crs
-    if (!sp::is.projected(l)) {
-      sel <- geo_buffer(lpoints, width = toptail_dist[i], ..., silent = TRUE)
-    } else {
-      sel <- rgeos::gBuffer(lpoints, dist = toptail_dist[i], ...)
-    }
-
-    if (rgeos::gContainsProperly(sel, l[i, ])) {
-      message(paste0(
-        "Line ", i, " is completely removed by the clip and",
-        " is omitted from the results"
-      ))
-      next
-    }
-    l2 <- rgeos::gDifference(l[i, ], sel)
-    if (!exists("out")) {
-      out <- l2
-    } else {
-      out <- raster::bind(out, l2)
-    }
-  }
-  out
-}
 #' @export
 geo_toptail.sf <- function(l, toptail_dist, ...) {
   l_sp <- as(l, "Spatial")
   res_sp <- geo_toptail(l = l_sp, toptail_dist = toptail_dist, ...)
   sf::st_as_sf(res_sp)
 }
-#' Create a buffer of n metres for non-projected 'geographical' spatial data
-#'
-#' Solves the problem that buffers will not be circular when used on
-#' non-projected data.
-#'
-#' @inheritParams geo_buffer
-#' @family geo
-#' @export
-buff_geo <- function(shp, width, ...) {
-  .Deprecated(new = "geo_buffer")
-  gprojected(shp = shp, fun = rgeos::gBuffer, width = width, ...)
-}
+
 #' Clip the first and last n metres of SpatialLines
 #'
 #' Takes lines and removes the start and end point, to a distance determined

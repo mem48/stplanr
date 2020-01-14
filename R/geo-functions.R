@@ -121,40 +121,7 @@ mapshape_available <- function() {
 gclip <- function(shp, bb) {
   UseMethod("gclip")
 }
-#' @export
-gclip.Spatial <- function(shp, bb) {
-  if (class(bb) == "matrix") {
-    b_poly <- as(raster::extent(as.vector(t(bb))), "SpatialPolygons")
-  }
-  else {
-    b_poly <- as(raster::extent(bb), "SpatialPolygons")
-  }
-  clipped <- rgeos::gIntersection(shp, b_poly, byid = TRUE, id = row.names(shp))
-  if (grepl("DataFrame", class(shp))) {
-    if (grepl("SpatialLines", class(shp)) & grepl("SpatialCollections", class(clipped))) {
-      geodata <- data.frame(gclip_id = row.names(clipped@lineobj))
-    }
-    else {
-      geodata <- data.frame(gclip_id = row.names(clipped))
-    }
-    joindata <- cbind(gclip_id = row.names(shp), shp@data)
-    geodata <- dplyr::left_join(geodata, joindata)
-    row.names(geodata) <- geodata$gclip_id
-    # if the data are SpatialPolygonsDataFrame (based on https://stat.ethz.ch/pipermail/r-sig-geo/2008-January/003052.html)
-    if (grepl("SpatialPolygons", class(shp))) {
-      # then rebuild SpatialPolygonsDataFrame selecting relevant rows by row.names (row ID values)
-      clipped <- sp::SpatialPolygonsDataFrame(clipped, as(shp[row.names(clipped), ], "data.frame"))
-    } else if (grepl("SpatialLines", class(shp)) & grepl("SpatialCollections", class(clipped))) {
-      clipped <- sp::SpatialLinesDataFrame(clipped@lineobj, geodata)
-    } else if (grepl("SpatialLines", class(shp))) {
-      clipped <- sp::SpatialLinesDataFrame(clipped, geodata)
-    } else { # assumes the data is a SpatialPointsDataFrame
-      clipped <- sp::SpatialPointsDataFrame(clipped, geodata)
-    }
-  }
-  clipped@data$gclip_id <- NULL
-  clipped
-}
+
 #' @export
 gclip.sf <- function(shp, bb) {
   shp <- as(shp, "Spatial")
@@ -219,23 +186,6 @@ geo_bb <- function(shp, scale_factor = 1, distance = 0, output = c("polygon", "p
   UseMethod("geo_bb")
 }
 
-#' @export
-geo_bb.Spatial <- function(shp, scale_factor = 1, distance = 0, output = c("polygon", "points", "bb")) {
-  output <- match.arg(output)
-  bb <- geo_bb_matrix(shp)
-  bb <- bbox_scale(bb = bb, scale_factor = scale_factor)
-  bb <- bb2poly(bb = bb, distance = distance)
-  sp::proj4string(bb) <- sp::proj4string(shp)
-  if (output == "polygon") {
-    return(bb)
-  } else if (output == "points") {
-    bb_point <- sp::SpatialPoints(raster::geom(bb)[1:4, c(5, 6)])
-    sp::proj4string(bb_point) <- sp::proj4string(shp)
-    return(bb_point)
-  } else if (output == "bb") {
-    return(geo_bb_matrix(bb))
-  }
-}
 
 #' @export
 geo_bb.sf <- function(shp, scale_factor = 1, distance = 0, output = c("polygon", "points", "bb")) {
@@ -297,20 +247,6 @@ geo_bb.matrix <- function(shp, scale_factor = 1, distance = 0, output = c("polyg
   }
 }
 
-#' @export
-bb2poly <- function(bb, distance = 0) {
-  if (is(bb, "matrix")) {
-    b_poly <- as(raster::extent(as.vector(t(bb))), "SpatialPolygons")
-  } else {
-    b_poly <- as(raster::extent(bb), "SpatialPolygons")
-    proj4string(b_poly) <- proj4string(bb)
-  }
-  if (distance > 0) {
-    b_poly_buff <- geo_buffer(shp = b_poly, width = distance)
-    b_poly <- bb2poly(b_poly_buff)
-  }
-  b_poly
-}
 
 #' Create matrix representing the spatial bounds of an object
 #'
@@ -328,10 +264,7 @@ bb2poly <- function(bb, distance = 0) {
 geo_bb_matrix <- function(shp) {
   UseMethod("geo_bb_matrix")
 }
-#' @export
-geo_bb_matrix.Spatial <- function(shp) {
-  sp::bbox(shp)
-}
+
 #' @export
 geo_bb_matrix.sf <- function(shp) {
   bb <- sf::st_bbox(shp)
