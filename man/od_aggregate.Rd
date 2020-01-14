@@ -77,7 +77,6 @@ plot(od_sf_agg$geometry, lwd = od_sf_agg$Bicycle, add = TRUE, col = "red")
 }
 \seealso{
 Other od: 
-\code{\link{dist_google}()},
 \code{\link{od2line}()},
 \code{\link{od2odf}()},
 \code{\link{od_aggregate_from}()},

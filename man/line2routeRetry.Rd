@@ -35,12 +35,6 @@ rf_list <- line2routeRetry(flowlines[1:2, ], pattern = "nonexistanceerror", sile
 }
 \seealso{
 Other routes: 
-\code{\link{line2route}()},
-\code{\link{route_cyclestreet}()},
-\code{\link{route_dodgr}()},
-\code{\link{route_graphhopper}()},
-\code{\link{route_local}()},
-\code{\link{route_transportapi_public}()},
-\code{\link{route}()}
+\code{\link{line2route}()}
 }
 \concept{routes}

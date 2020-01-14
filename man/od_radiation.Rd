@@ -42,7 +42,6 @@ mobility and migration patterns. Nature. doi:10.1038/nature10856
 }
 \seealso{
 Other od: 
-\code{\link{dist_google}()},
 \code{\link{od2line}()},
 \code{\link{od2odf}()},
 \code{\link{od_aggregate_from}()},

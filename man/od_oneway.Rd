@@ -74,7 +74,6 @@ bench::mark(check = FALSE, iterations = 3,
 }
 \seealso{
 Other od: 
-\code{\link{dist_google}()},
 \code{\link{od2line}()},
 \code{\link{od2odf}()},
 \code{\link{od_aggregate_from}()},
