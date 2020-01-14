@@ -1,4 +1,4 @@
 library(testthat)
-library(stplanr)
+library(stplanrlite)
 
-test_check("stplanr")
+test_check("stplanrlite")
