@@ -17,9 +17,7 @@ mapshape_available()
 \seealso{
 Other geo: 
 \code{\link{bbox_scale}()},
-\code{\link{gclip}()},
 \code{\link{geo_bb_matrix}()},
-\code{\link{geo_bb}()},
 \code{\link{mapshape}()}
 }
 \concept{geo}

@@ -41,10 +41,8 @@ Other od:
 \code{\link{od_dist}()},
 \code{\link{od_id}},
 \code{\link{od_oneway}()},
-\code{\link{od_radiation}()},
 \code{\link{odmatrix_to_od}()},
 \code{\link{points2flow}()},
-\code{\link{points2odf}()},
-\code{\link{sp_aggregate}()}
+\code{\link{points2odf}()}
 }
 \concept{od}

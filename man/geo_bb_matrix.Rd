@@ -6,24 +6,12 @@
 \usage{
 geo_bb_matrix(shp)
 }
-\arguments{
-\item{shp}{Spatial object (from sf or sp packages)}
-}
 \description{
 Converts a range of spatial data formats into a matrix representing the bounding box
-}
-\examples{
-geo_bb_matrix(routes_fast)
-geo_bb_matrix(routes_fast_sf)
-geo_bb_matrix(cents[1, ])
-geo_bb_matrix(c(-2, 54))
-geo_bb_matrix(sf::st_coordinates(cents_sf))
 }
 \seealso{
 Other geo: 
 \code{\link{bbox_scale}()},
-\code{\link{gclip}()},
-\code{\link{geo_bb}()},
 \code{\link{mapshape_available}()},
 \code{\link{mapshape}()}
 }

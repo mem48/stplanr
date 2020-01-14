@@ -46,13 +46,8 @@ overlapping segments. Reproducible question from
 }
 \seealso{
 Other rnet: 
-\code{\link{calc_catchment_sum}()},
-\code{\link{calc_catchment}()},
-\code{\link{calc_moving_catchment}()},
-\code{\link{calc_network_catchment}()},
 \code{\link{gsection}()},
 \code{\link{islines}()},
-\code{\link{lineLabels}()},
 \code{\link{overline2}()}
 }
 \author{

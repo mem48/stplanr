@@ -11,7 +11,6 @@
 #' @param toptail_dist The distance (in metres) to top and tail the line by.
 #' Can either be a single value or a vector of the same length as the
 #' SpatialLines object.
-#' @param ... Arguments passed to rgeos::gBuffer()
 #' @aliases toptail
 #' @family lines
 #' @export
@@ -109,46 +108,4 @@ toptailgs <- function(l, toptail_dist, tail_dist = NULL) {
   return(l)
 }
 
-#' Clip the beginning and ends SpatialLines to the edge of SpatialPolygon borders
-#'
-#' Takes lines and removes the start and end point, to a distance determined
-#' by the nearest polygon border.
-#'
-#' @param l A SpatialLines object
-#' @param buff A SpatialPolygons object to act as the buffer
-#' @param ... Arguments passed to rgeos::gBuffer()
-#' @family lines
-#' @export
-#' @examples
-#' r_toptail <- toptail_buff(routes_fast, zones)
-#' sel <- row.names(routes_fast) %in% row.names(r_toptail)
-#' rf_cross_poly <- routes_fast[sel, ]
-#' plot(zones)
-#' plot(routes_fast, col = "blue", lwd = 4, add = TRUE)
-#' # note adjacent lines removed
-#' plot(rf_cross_poly, add = TRUE, lwd = 2)
-#' plot(r_toptail, col = "red", add = TRUE)
-toptail_buff <- function(l, buff, ...) {
-  # force same crs
-  if (!sp::identicalCRS(l, buff)) {
-    sp::proj4string(buff) <- sp::proj4string(l)
-  }
-  for (i in 1:length(l)) {
-    lpoints <- line2points(l[i, ])
-    # Select zones per line
-    sel <- buff[lpoints, ]
-    l2 <- rgeos::gDifference(l[i, ], sel)
-    if (is.null(l2)) {
-      next
-    } else {
-      row.names(l2) <- row.names(l[i, ])
-    }
-    if (!exists("out")) {
-      out <- l2
-    } else {
-      out <- raster::bind(out, l2)
-    }
-  }
-  proj4string(out) <- proj4string(l)
-  out
-}
+

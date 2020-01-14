@@ -2,7 +2,6 @@
 % Please edit documentation in R/od-funs.R
 \name{od2line}
 \alias{od2line}
-\alias{od2line2}
 \title{Convert origin-destination data to spatial lines}
 \usage{
 od2line(
@@ -15,8 +14,6 @@ od2line(
   zone_code_d = NA,
   silent = FALSE
 )
-
-od2line2(flow, zones)
 }
 \arguments{
 \item{flow}{A data frame representing origin-destination data.
@@ -88,11 +85,9 @@ Other od:
 \code{\link{od_dist}()},
 \code{\link{od_id}},
 \code{\link{od_oneway}()},
-\code{\link{od_radiation}()},
 \code{\link{od_to_odmatrix}()},
 \code{\link{odmatrix_to_od}()},
 \code{\link{points2flow}()},
-\code{\link{points2odf}()},
-\code{\link{sp_aggregate}()}
+\code{\link{points2odf}()}
 }
 \concept{od}

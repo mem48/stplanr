@@ -30,12 +30,7 @@ islines(routes_fast_sf[2, ], routes_fast_sf[22, ])
 }
 \seealso{
 Other rnet: 
-\code{\link{calc_catchment_sum}()},
-\code{\link{calc_catchment}()},
-\code{\link{calc_moving_catchment}()},
-\code{\link{calc_network_catchment}()},
 \code{\link{gsection}()},
-\code{\link{lineLabels}()},
 \code{\link{overline2}()},
 \code{\link{overline}()}
 }

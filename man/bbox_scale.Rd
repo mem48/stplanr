@@ -7,8 +7,6 @@
 bbox_scale(bb, scale_factor)
 }
 \arguments{
-\item{bb}{the bounding box or spatial object that will be used to crop \code{shp}}
-
 \item{scale_factor}{Numeric vector determining how much the bounding box will grow or shrink.
 Two numbers refer to extending the bounding box in x and y dimensions, respectively.
 If the value is 1, the output size will be the same as the input.}
@@ -28,9 +26,7 @@ points(bb[1, ], bb[2, ], col = "red")
 }
 \seealso{
 Other geo: 
-\code{\link{gclip}()},
 \code{\link{geo_bb_matrix}()},
-\code{\link{geo_bb}()},
 \code{\link{mapshape_available}()},
 \code{\link{mapshape}()}
 }

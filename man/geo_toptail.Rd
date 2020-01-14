@@ -13,8 +13,6 @@ geo_toptail(l, toptail_dist, ...)
 \item{toptail_dist}{The distance (in metres) to top and tail the line by.
 Can either be a single value or a vector of the same length as the
 SpatialLines object.}
-
-\item{...}{Arguments passed to rgeos::gBuffer()}
 }
 \description{
 Takes lines and removes the start and end point, to a distance determined
@@ -38,21 +36,13 @@ geo_toptail(routes_fast_sf[2:4, ], 300)
 }
 \seealso{
 Other lines: 
-\code{\link{angle_diff}()},
-\code{\link{is_linepoint}()},
 \code{\link{line2df}()},
 \code{\link{line2points}()},
-\code{\link{line_bearing}()},
-\code{\link{line_midpoint}()},
-\code{\link{line_segment}()},
-\code{\link{line_via}()},
 \code{\link{mats2line}()},
 \code{\link{n_sample_length}()},
-\code{\link{n_vertices}()},
 \code{\link{onewaygeo}()},
 \code{\link{onewayid}()},
 \code{\link{points2line}()},
-\code{\link{toptail_buff}()},
 \code{\link{toptailgs}()},
 \code{\link{update_line_geometry}()}
 }

@@ -23,8 +23,7 @@ See the mapshaper documentation for details:
 
 The percent argument refers to the percentage of removable points to retain.
 So \code{percent = 1} is a very aggressive simplication, saving a huge amount of
-hard-disk space.
-\code{\link[rgeos:gSimplify]{rgeos::gSimplify()}}}
+hard-disk space.}
 }
 \description{
 Simplify geometry of spatial objects with the mapshaper library
@@ -63,9 +62,7 @@ mapshape(routes_fast_sf[2, ])
 \seealso{
 Other geo: 
 \code{\link{bbox_scale}()},
-\code{\link{gclip}()},
 \code{\link{geo_bb_matrix}()},
-\code{\link{geo_bb}()},
 \code{\link{mapshape_available}()}
 }
 \concept{geo}

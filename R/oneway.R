@@ -103,41 +103,6 @@ onewayid.data.frame <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2],
   return(x_oneway)
 }
 
-#' @name onewayid
-#' @examples
-#' # with spatial data
-#' data(flowlines)
-#' fo <- onewayid(flowlines, attrib = "All")
-#' head(fo@data)
-#' plot(fo)
-#' sum(fo$All) == sum(flowlines$All)
-#' # test results for one line
-#' n <- 3
-#' plot(fo[n, ], lwd = 20, add = TRUE)
-#' f_over_n <- rgeos::gEquals(fo[n, ], flowlines["All"], byid = TRUE)
-#' sum(flowlines$All[f_over_n]) == sum(fo$All[n]) # check aggregation worked
-#' plot(flowlines[which(f_over_n)[1], ], add = TRUE, col = "white", lwd = 10)
-#' plot(flowlines[which(f_over_n)[2], ], add = TRUE, lwd = 5)
-#' @export
-onewayid.SpatialLines <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2],
-                                  stplanr.key = od_id_order(x, id1, id2)) {
-  x_geom <- sp::SpatialLines(x@lines, proj4string = sp::CRS(proj4string(x)))
-  x <- x@data
-
-  x_oneway <- onewayid(x, id1, id2, attrib = attrib)
-  x_oneway$stplanr.key <- od_id_order(x_oneway[c(id1, id2)])$stplanr.key
-
-  if (length(x_geom) != nrow(x_oneway)) {
-    id_old <- paste(x[[id1]], x[[id2]])
-    sel <- id_old %in% x_oneway$stplanr.key
-    x_geom <- x_geom[sel, ]
-  }
-
-  x_oneway <- sp::SpatialLinesDataFrame(sl = x_geom, data = x_oneway, match.ID = FALSE)
-
-  return(x_oneway)
-}
-
 #' Generate ordered ids of OD pairs so lowest is always first
 #' This function is slow on large datasets, see szudzik_pairing for faster alternative
 #'
@@ -183,20 +148,6 @@ od_id_order <- function(x, id1 = names(x)[1], id2 = names(x)[2]) {
 #' od_id_max_min(d[[1]], d[[2]])
 #' n <- 100
 #' ids <- as.character(runif(n, 1e4, 1e7 - 1))
-#' # benchmark of methods:
-#' x <- data.frame(
-#'   id1 = rep(ids, times = n),
-#'   id2 = rep(ids, each = n),
-#'   val = 1,
-#'   stringsAsFactors = FALSE
-#' )
-#' bench::mark(check = FALSE, iterations = 10,
-#'   od_id_order(x),
-#'   od_id_character(x$id1, x$id2),
-#'   od_id_szudzik(x$id1, x$id2),
-#'   od_id_max_min(x$id1, x$id2)
-#' )
-NULL
 #' @rdname od_id
 #' @export
 od_id_szudzik <- function(x, y, ordermatters = FALSE) {
@@ -308,11 +259,6 @@ not_duplicated <- function(x) {
 #' par(mfrow = c(1, 1))
 #' od_max_min <- od_oneway(od_min, stplanr.key = od_id_character(od_min[[1]], od_min[[2]]))
 #' cor(od_max_min$all, od_oneway$all)
-#' # benchmark performance
-#' bench::mark(check = FALSE, iterations = 3,
-#'   onewayid(flowlines_sf, attrib),
-#'   od_oneway(flowlines_sf)
-#' )
 od_oneway <- function(x,
            attrib = names(x[-c(1:2)])[vapply(x[-c(1:2)], is.numeric, TRUE)],
            id1 = names(x)[1],

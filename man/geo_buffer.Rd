@@ -14,17 +14,9 @@ around which a buffer should be drawn}
 
 \item{width}{The distance (in metres) of the buffer (when buffering sp objects)}
 
-\item{...}{Arguments passed to the buffer (see \code{?rgeos::gBuffer} or \code{?sf::st_buffer} for details)}
+\item{...}{Arguments passed to the buffer (see \code{?sf::st_buffer} for details)}
 }
 \description{
 This function solves the problem that buffers will not be circular when used on
 non-projected data.
-}
-\examples{
-buff_sp <- geo_buffer(routes_fast, width = 100)
-class(buff_sp)
-plot(buff_sp, col = "red")
-routes_fast_sf <- sf::st_as_sf(routes_fast)
-buff_sf <- geo_buffer(routes_fast_sf, dist = 50)
-plot(buff_sf$geometry, add = TRUE)
 }

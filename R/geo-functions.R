@@ -4,7 +4,6 @@
 #' `geojson_write` from the geojsonio package
 #' provides the same functionality <https://github.com/ropensci/geojsonio>.
 #'
-#' @inheritParams gclip
 #' @param filename File name of the output geojson
 writeGeoJSON <- function(shp, filename) {
   name <- nm <- deparse(substitute(shp))
@@ -39,7 +38,6 @@ writeGeoJSON <- function(shp, filename) {
 #' The percent argument refers to the percentage of removable points to retain.
 #' So `percent = 1` is a very aggressive simplication, saving a huge amount of
 #' hard-disk space.
-#' [rgeos::gSimplify()]
 #' @family geo
 #' @export
 #' @examples
@@ -94,45 +92,11 @@ mapshape_available <- function() {
   suppressWarnings(system("mapshaper --version")) != 127
 }
 
-#' Crops spatial object x to the bounding box of spatial object (or matrix) b
-#'
-#' This function is a cross between the spatial subsetting funtions such as
-#' sp::over(), rgeos::gIntersects() etc, and the cropping functions of
-#' raster::crop() and rgeos::gIntersection(). The output is the subset of
-#' spatial object a with an outline described by a square bounding box.
-#' The utility of such a function is illustrated in the following question:
-#' <http://gis.stackexchange.com/questions/46954/clip-spatial-object-to-bounding-box-in-r/>.
-#' @param shp The spatial object a to be cropped
-#' @param bb the bounding box or spatial object that will be used to crop `shp`
-#' @family geo
-#'
-#' @export
-#' @examples
-#' data(cents)
-#' cb <- rgeos::gBuffer(cents[8, ], width = 0.012, byid = TRUE)
-#' plot(cents)
-#' plot(cb, add = TRUE)
-#' clipped <- gclip(cents, cb)
-#' plot(clipped, add = TRUE)
-#' clipped$avslope # gclip also returns the data attribute
-#' points(clipped)
-#' points(cents[cb, ], col = "red") # note difference
-#' gclip(cents_sf, cb)
-gclip <- function(shp, bb) {
-  UseMethod("gclip")
-}
 
-#' @export
-gclip.sf <- function(shp, bb) {
-  shp <- as(shp, "Spatial")
-  shp <- gclip.Spatial(shp, as(bb, "Spatial"))
-  sf::st_as_sf(shp)
-}
 #' Scale a bounding box
 #'
 #' Takes a bounding box as an input and outputs a bounding box of a different size, centred at the same point.
 #'
-#' @inheritParams gclip
 #' @param scale_factor Numeric vector determining how much the bounding box will grow or shrink.
 #' Two numbers refer to extending the bounding box in x and y dimensions, respectively.
 #' If the value is 1, the output size will be the same as the input.
@@ -153,114 +117,14 @@ bbox_scale <- function(bb, scale_factor) {
   b
 }
 
-#' Flexible function to generate bounding boxes
-#'
-#' Takes a geographic object or bounding box as an input and outputs a bounding box,
-#' represented as a bounding box, corner points or rectangular polygon.
-#'
-#' @inheritParams bbox_scale
-#' @param shp Spatial object (from sf or sp packages)
-#' @param distance Distance in metres to extend the bounding box by
-#' @param output Type of object returned (polygon by default)
-#' @aliases bb2poly
-#' @seealso bb_scale
-#' @family geo
-#' @export
-#' @examples
-#' # Simple features implementation:
-#' shp <- routes_fast_sf
-#' shp_bb <- geo_bb(shp, distance = 100)
-#' plot(shp_bb, col = "red", reset = FALSE)
-#' plot(geo_bb(routes_fast_sf, scale_factor = 0.8), col = "green", add = TRUE)
-#' plot(geo_bb(routes_fast_sf, output = "points"), add = TRUE)
-#' plot(routes_fast_sf$geometry, add = TRUE)
-#' geo_bb(routes_fast, scale_factor = c(2, 1.1), output = "bb")
-#' # sp implemantation
-#' shp <- routes_fast
-#' shp_bb <- geo_bb(shp, distance = 100)
-#' plot(shp_bb, col = "red")
-#' plot(geo_bb(routes_fast, scale_factor = 0.8), col = "green", add = TRUE)
-#' plot(geo_bb(sp::bbox(routes_fast)), add = TRUE) # works on bb also
-#' plot(geo_bb(routes_fast, output = "points"), add = TRUE)
-geo_bb <- function(shp, scale_factor = 1, distance = 0, output = c("polygon", "points", "bb")) {
-  UseMethod("geo_bb")
-}
-
-
-#' @export
-geo_bb.sf <- function(shp, scale_factor = 1, distance = 0, output = c("polygon", "points", "bb")) {
-  output <- match.arg(output)
-  bb <- geo_bb_matrix(shp)
-  bb <- bbox_scale(bb = bb, scale_factor = scale_factor)
-  bb_sp <- bb2poly(bb = bb, distance = distance)
-  bb <- sf::st_as_sf(bb_sp)
-  sf::st_crs(bb) <- sf::st_crs(shp)
-  if (output == "polygon") {
-    return(bb)
-  } else if (output == "points") {
-    bb_point <- sp::SpatialPoints(raster::geom(bb_sp)[1:4, c(5, 6)])
-    bb_point <- sf::st_as_sf(bb_point)
-    sf::st_crs(bb_point) <- sf::st_crs(shp)
-    return(bb_point)
-  } else if (output == "bb") {
-    return(geo_bb_matrix(bb))
-  }
-}
-
-#' @export
-geo_bb.bbox <- function(shp, scale_factor = 1, distance = 0, output = c("polygon", "points", "bb")) {
-  output <- match.arg(output)
-  bb <- matrix(shp, ncol = 2)
-  bb <- bbox_scale(bb = bb, scale_factor = scale_factor)
-  bb_sp <- bb2poly(bb = bb, distance = distance)
-  bb <- sf::st_as_sf(bb_sp)
-  sf::st_crs(bb) <- sf::st_crs(shp)
-  if (output == "polygon") {
-    return(bb)
-  } else if (output == "points") {
-    bb_point <- sp::SpatialPoints(raster::geom(bb_sp)[1:4, c(5, 6)])
-    bb_point <- sf::st_as_sf(bb_point)
-    sf::st_crs(bb_point) <- sf::st_crs(shp)
-    return(bb_point)
-  } else if (output == "bb") {
-    return(geo_bb_matrix(bb))
-  }
-}
-
-#' @export
-geo_bb.matrix <- function(shp, scale_factor = 1, distance = 0, output = c("polygon", "points", "bb")) {
-  output <- match.arg(output)
-  if (nrow(shp) != 2) {
-    bb <- geo_bb_matrix(shp)
-  } else {
-    bb <- shp
-  }
-  bb <- bbox_scale(bb = bb, scale_factor = scale_factor)
-  bb <- bb2poly(bb = bb, distance = distance)
-  if (output == "polygon") {
-    return(bb)
-  } else if (output == "points") {
-    bb_point <- sp::SpatialPoints(raster::geom(bb)[1:4, c(5, 6)])
-    return(bb_point)
-  } else if (output == "bb") {
-    return(geo_bb_matrix(bb))
-  }
-}
 
 
 #' Create matrix representing the spatial bounds of an object
 #'
 #' Converts a range of spatial data formats into a matrix representing the bounding box
 #'
-#' @inheritParams geo_bb
 #' @family geo
 #' @export
-#' @examples
-#' geo_bb_matrix(routes_fast)
-#' geo_bb_matrix(routes_fast_sf)
-#' geo_bb_matrix(cents[1, ])
-#' geo_bb_matrix(c(-2, 54))
-#' geo_bb_matrix(sf::st_coordinates(cents_sf))
 geo_bb_matrix <- function(shp) {
   UseMethod("geo_bb_matrix")
 }

@@ -66,11 +66,6 @@ plot(flow_oneway_sf$geometry, lwd = flow_oneway_sf$All / mean(flow_oneway_sf$All
 par(mfrow = c(1, 1))
 od_max_min <- od_oneway(od_min, stplanr.key = od_id_character(od_min[[1]], od_min[[2]]))
 cor(od_max_min$all, od_oneway$all)
-# benchmark performance
-bench::mark(check = FALSE, iterations = 3,
-  onewayid(flowlines_sf, attrib),
-  od_oneway(flowlines_sf)
-)
 }
 \seealso{
 Other od: 
@@ -83,11 +78,9 @@ Other od:
 \code{\link{od_coords}()},
 \code{\link{od_dist}()},
 \code{\link{od_id}},
-\code{\link{od_radiation}()},
 \code{\link{od_to_odmatrix}()},
 \code{\link{odmatrix_to_od}()},
 \code{\link{points2flow}()},
-\code{\link{points2odf}()},
-\code{\link{sp_aggregate}()}
+\code{\link{points2odf}()}
 }
 \concept{od}

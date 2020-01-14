@@ -67,24 +67,7 @@ gsection.sf <- function(sl, buff_dist = 0) {
 
   u_disag
 }
-#' Label SpatialLinesDataFrame objects
-#'
-#' This function adds labels to lines plotted using base graphics. Largely
-#' for illustrative purposes, not designed for publication-quality
-#' graphics.
-#'
-#' @param sl A SpatialLinesDataFrame with overlapping elements
-#' @param attrib A text string corresponding to a named variable in `sl`
-#'
-#' @author Barry Rowlingson
-#' @family rnet
-#'
-#' @export
-lineLabels <- function(sl, attrib) {
-  text(sp::coordinates(
-    rgeos::gCentroid(sl, byid = TRUE)
-  ), labels = sl[[attrib]])
-}
+
 
 #' Convert series of overlapping lines into a route network
 #'

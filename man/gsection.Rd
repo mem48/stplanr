@@ -33,12 +33,7 @@ rsec <- gsection(sl, buff_dist = 100) # 4 features: issue
 }
 \seealso{
 Other rnet: 
-\code{\link{calc_catchment_sum}()},
-\code{\link{calc_catchment}()},
-\code{\link{calc_moving_catchment}()},
-\code{\link{calc_network_catchment}()},
 \code{\link{islines}()},
-\code{\link{lineLabels}()},
 \code{\link{overline2}()},
 \code{\link{overline}()}
 }
